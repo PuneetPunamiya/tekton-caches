@@ -80,5 +80,18 @@ jobs:
 
     - name: Install Tekton Pipelines
       run: |
+        curl https://storage.googleapis.com/tekton-releases/pipeline/latest/release.notags.yaml | yq 'del(.spec.template.spec.containers[].securityContext.runAsUser, .spec.template.spec.containers[].securityContext.runAsGroup)' | oc apply -f -
+        kubectl -n tekton-pipelines patch cm feature-flags -p '{"data": {"enable-step-actions": "true"}}'
+
+
+    - name: Install Tekton Pipelines
+      run: |
         chmod +x tests/crc_test.sh
         ./tests/crc_test.sh
+
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+      with:
+        limit-access-to-actor: true
+        detached: true
