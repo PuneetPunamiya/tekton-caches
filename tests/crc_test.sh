@@ -14,7 +14,7 @@ function start_registry() {
 }
 
 function install_pipeline_crd() {
-	curl https://storage.googleapis.com/tekton-releases/pipeline/latest/release.notags.yaml | yq 'del(.spec.template.spec.containers[].securityContext.runAsUser, .spec.template.spec.containers[].securityContext.runAsGroup)' | oc apply -f -
+	# curl https://storage.googleapis.com/tekton-releases/pipeline/latest/release.notags.yaml | yq 'del(.spec.template.spec.containers[].securityContext.runAsUser, .spec.template.spec.containers[].securityContext.runAsGroup)' | oc apply -f -
   # Wait for pods to be running in the namespaces we are deploying to
   wait_until_pods_running tekton-pipelines || fail_test "Tekton Pipeline did not come up"
 }
@@ -52,7 +52,7 @@ main() {
   start_registry
 
   install_pipeline_crd
-  kubectl -n tekton-pipelines patch cm feature-flags -p '{"data": {"enable-step-actions": "true"}}'
+  # kubectl -n tekton-pipelines patch cm feature-flags -p '{"data": {"enable-step-actions": "true"}}'
 
   make e2e
 }

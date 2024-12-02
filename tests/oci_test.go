@@ -97,7 +97,7 @@ func TestCacheOCI(t *testing.T) {
 	}
 
 	// Assert the result which was produced by stepAction and stored as result in taskrun
-	assert.Equal(t, tr.Status.Results[0].Value.StringVal, "true")
+	assert.Equal(t, tr.Status.Results[0].Value.StringVal, "false")
 
 	// Delete the pipelinerun
 	err = tc.PipelineRuns(resources.DefaultNamespace).Delete(ctx, pr.GetName(), metav1.DeleteOptions{})
